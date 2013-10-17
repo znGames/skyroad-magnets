@@ -1,5 +1,6 @@
 package com.zngames.skymag;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 
@@ -24,14 +25,36 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+		switch(keycode){
+			case Keys.I:
+				world.getRenderer().startDrawingLeftLine();
+				world.getLeftMagnet().activate();
+				break;
+			case Keys.P:
+				world.getRenderer().startDrawingRightLine();
+				world.getRightMagnet().activate();
+				break;
+			default:
+				break;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+		switch(keycode){
+			case Keys.I:
+				world.getRenderer().stopDrawingLeftLine();
+				world.getLeftMagnet().deactivate();
+				break;
+			case Keys.P:
+				world.getRenderer().stopDrawingRightLine();
+				world.getRightMagnet().deactivate();
+				break;
+			default:
+				break;
+		}
+	return true;
 	}
 
 	@Override
