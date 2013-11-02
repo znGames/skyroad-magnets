@@ -1,6 +1,7 @@
 package com.zngames.skymag;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,12 +16,14 @@ public class SkyMagGame extends Game {
 	private Sprite sprite;
 	private TextureRegion region;
 	private FPSLogger log;
+	private static float height;
+	private static float width;
 
 	
 	@Override
 	public void create() {		
-		/*float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
+		/*float w = SkyMagGame.getWidth();
+		float h = SkyMagGame.getHeight();
 		
 		camera = new OrthographicCamera(1, h/w);
 		batch = new SpriteBatch();
@@ -36,6 +39,8 @@ public class SkyMagGame extends Game {
 		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);*/
 		
 		//batch = new SpriteBatch();
+		SkyMagGame.setHeight(Gdx.graphics.getHeight());
+		SkyMagGame.setWidth(Gdx.graphics.getWidth());
 		log = new FPSLogger();
 		setScreen(new GameScreen(this));
 	}
@@ -79,6 +84,8 @@ public class SkyMagGame extends Game {
 
 	@Override
 	public void resize(int width, int height) {
+		SkyMagGame.setHeight(Gdx.graphics.getHeight());
+		SkyMagGame.setWidth(Gdx.graphics.getWidth());
 		super.resize(width, height);
 	}
 
@@ -91,4 +98,22 @@ public class SkyMagGame extends Game {
 	public void resume() {
 		super.resume();
 	}
+	
+	public static float getHeight(){
+		return height;
+	}
+
+	
+	public static float getWidth(){
+		return width;
+	}
+	
+	private static void setHeight(float height){
+		SkyMagGame.height = height;
+	}
+	
+	private static void setWidth(float width){
+		SkyMagGame.width = width;
+	}
+
 }
