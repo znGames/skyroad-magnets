@@ -20,21 +20,21 @@ public class World {
 	float muRadius;
 	float sigmaRadius;
 	float minDistanceBetweenHoles;
-	final float fieldWidth = Gdx.graphics.getWidth() * 0.5f; 
+	final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
 	final float maxRadius = fieldWidth * 0.2f;
 	
 	public World(SkyMagGame game){
 		this.game = game;
-		leftMagnet = new Magnet(new Vector2(Gdx.graphics.getWidth() / 9, Gdx.graphics.getHeight() / 2), 40, 40);
-		rightMagnet = new Magnet(new Vector2(8*Gdx.graphics.getWidth() / 9, Gdx.graphics.getHeight() / 2), 40, 40);
-		ship = new Ship(new Vector2(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 5 ), 30, 30, leftMagnet, rightMagnet);
+		leftMagnet = new Magnet(new Vector2(SkyMagGame.getWidth() / 9, SkyMagGame.getHeight() / 2), 40, 40);
+		rightMagnet = new Magnet(new Vector2(8*SkyMagGame.getWidth() / 9, SkyMagGame.getHeight() / 2), 40, 40);
+		ship = new DiscShip(leftMagnet, rightMagnet);
 		Gdx.input.setInputProcessor(new InputHandler(this));
 		timeSinceLastCircle = 0;
 		holes = new Array<Circle>(false, 16);
 		muRadius = maxRadius*0.25f;
 		sigmaRadius = maxRadius*0.50f;
 		minDistanceBetweenHoles = ship.getWidth();
-		testCircle = new Circle(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight()*1.2f, 50);
+		testCircle = new Circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()*1.2f, 50);
 	}
 	
 	public void update(float delta){
@@ -45,15 +45,15 @@ public class World {
 		if(MathUtils.random(timeSinceLastCircle) > 1.5){
 			//System.out.println("GENERATE !");
 			timeSinceLastCircle = 0;
-			//holes.add(new Circle(MathUtils.random(Gdx.graphics.getWidth()*0.25f, Gdx.graphics.getWidth()*0.25f + fieldWidth), Gdx.graphics.getHeight()+maxRadius, generateRadius()));
+			//holes.add(new Circle(MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth), SkyMagGame.getHeight()+maxRadius, generateRadius()));
 			float x;
-			float y = Gdx.graphics.getHeight()+maxRadius;
+			float y = SkyMagGame.getHeight()+maxRadius;
 			float radius = maxRadius;
 			boolean newCircleIsOk;
 			int abortionCount = 0;
 			do{
 				newCircleIsOk = true;
-				x = MathUtils.random(Gdx.graphics.getWidth()*0.25f, Gdx.graphics.getWidth()*0.25f + fieldWidth);
+				x = MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth);
 				radius = generateRadius(radius);
 				ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
 				while(iter.hasNext()){

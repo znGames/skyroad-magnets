@@ -104,6 +104,7 @@ public class InputHandler implements InputProcessor {
 		if(touch.x >= leftMagnetLeftBound && touch.x <= leftMagnetRightBound){
 			world.getLeftMagnet().getPosition().set(world.getLeftMagnet().getPosition().x, touch.y);
 			world.getRenderer().startDrawingLeftLine();
+			world.getLeftMagnet().activate();
 			//System.out.println("Left magnet touched : " + touch.x + ";" + touch.y);
 		}
 		else{
@@ -113,6 +114,7 @@ public class InputHandler implements InputProcessor {
 		if(touch.x >= rightMagnetLeftBound && touch.x <= rightMagnetRightBound){
 			world.getRightMagnet().getPosition().set(world.getRightMagnet().getPosition().x, touch.y);
 			world.getRenderer().startDrawingRightLine();
+			world.getRightMagnet().activate();
 			//System.out.println("Right magnet touched : " + touch.x + ";" + touch.y);
 		}
 		else{

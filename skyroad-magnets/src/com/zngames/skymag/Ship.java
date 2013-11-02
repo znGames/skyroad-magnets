@@ -1,16 +1,15 @@
 package com.zngames.skymag;
 
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-public class Ship extends Entity {
+public abstract class Ship extends Entity {
 	
 	Magnet leftMagnet;
 	Magnet rightMagnet;
 	Vector2 velocity;
 
-	public Ship(Vector2 position, float width, float height, Magnet leftMagnet, Magnet rightMagnet){
-		super(position, width, height);
+	public Ship(float width, float height, Magnet leftMagnet, Magnet rightMagnet){
+		super(new Vector2(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 5 ), width, height);
 		this.leftMagnet = leftMagnet;
 		this.rightMagnet = rightMagnet;
 		velocity = new Vector2(0,0);
@@ -44,5 +43,7 @@ public class Ship extends Entity {
 		//System.out.println("Velocity : " + velocity.toString());
 		position.add(velocity);
 	}
+	
+	public abstract boolean isFalling();
 	
 }

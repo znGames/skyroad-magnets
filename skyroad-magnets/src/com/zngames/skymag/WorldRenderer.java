@@ -21,8 +21,8 @@ public class WorldRenderer {
 		this.world = world;
 		world.setRenderer(this);
 		
-		cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+		cam = new OrthographicCamera(SkyMagGame.getWidth(), SkyMagGame.getHeight());
+		cam.position.set(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 2, 0);
 		cam.update();
 		
 		sRenderer = new ShapeRenderer();
@@ -38,17 +38,17 @@ public class WorldRenderer {
         sRenderer.setProjectionMatrix(cam.combined);
         sRenderer.begin(ShapeType.Filled);
         sRenderer.setColor(Color.ORANGE);
-        sRenderer.rect(Gdx.graphics.getWidth()*0.25f, 0, Gdx.graphics.getWidth()*0.5f, Gdx.graphics.getHeight());
+        sRenderer.rect(SkyMagGame.getWidth()*0.25f, 0, SkyMagGame.getWidth()*0.5f, SkyMagGame.getHeight());
         sRenderer.setColor(Color.BLACK);
         ArrayIterator<Circle> iter = new ArrayIterator<Circle>(world.holes);
         while(iter.hasNext()){
         	Circle circle = iter.next();
         	sRenderer.circle(circle.x, circle.y, circle.radius);
         }
-        //sRenderer.circle(Gdx.graphics.getWidth()/4, Gdx.graphics.getHeight()/4, 10);
-        //System.out.println(Gdx.graphics.getWidth());
-        //System.out.println(Gdx.graphics.getHeight());
-        //sRenderer.circle(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight()/5, 20);
+        //sRenderer.circle(SkyMagGame.getWidth()/4, SkyMagGame.getHeight()/4, 10);
+        //System.out.println(SkyMagGame.getWidth());
+        //System.out.println(SkyMagGame.getHeight());
+        //sRenderer.circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()/5, 20);
         sRenderer.setColor(Color.WHITE);
         sRenderer.circle(world.getShip().getX(), world.getShip().getY(), world.getShip().getWidth()/2);
         sRenderer.setColor(Color.RED);
@@ -67,8 +67,8 @@ public class WorldRenderer {
         	sRenderer.line(world.getRightMagnet().getPosition(), world.getShip().getPosition());
         }
         /*sRenderer.setColor(Color.WHITE);
-        sRenderer.line((float) Gdx.graphics.getWidth()*0.25f, 0f, (float) Gdx.graphics.getWidth()*0.25f, (float) Gdx.graphics.getHeight());
-        sRenderer.line((float) Gdx.graphics.getWidth()*0.75f, 0f, (float) Gdx.graphics.getWidth()*0.75f, (float) Gdx.graphics.getHeight());
+        sRenderer.line((float) SkyMagGame.getWidth()*0.25f, 0f, (float) SkyMagGame.getWidth()*0.25f, (float) SkyMagGame.getHeight());
+        sRenderer.line((float) SkyMagGame.getWidth()*0.75f, 0f, (float) SkyMagGame.getWidth()*0.75f, (float) SkyMagGame.getHeight());
         //sRenderer.circle(world.testCircle.x, world.testCircle.y, world.testCircle.radius);
         ArrayIterator<Circle> iter = new ArrayIterator<Circle>(world.holes);
         while(iter.hasNext()){
