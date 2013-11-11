@@ -40,9 +40,9 @@ public class WorldRenderer {
         sRenderer.setColor(Color.ORANGE);
         sRenderer.rect(SkyMagGame.getWidth()*0.25f, 0, SkyMagGame.getWidth()*0.5f, SkyMagGame.getHeight());
         sRenderer.setColor(Color.BLACK);
-        ArrayIterator<Circle> iter = new ArrayIterator<Circle>(world.holes);
-        while(iter.hasNext()){
-        	Circle circle = iter.next();
+        ArrayIterator<Circle> iterCircles = new ArrayIterator<Circle>(world.getHoles());
+        while(iterCircles.hasNext()){
+        	Circle circle = iterCircles.next();
         	sRenderer.circle(circle.x, circle.y, circle.radius);
         }
         //sRenderer.circle(SkyMagGame.getWidth()/4, SkyMagGame.getHeight()/4, 10);
@@ -58,7 +58,16 @@ public class WorldRenderer {
         sRenderer.setColor(Color.RED);
         sRenderer.rect(world.getLeftMagnet().getX() - world.getLeftMagnet().getWidth() / 2, world.getLeftMagnet().getY() - world.getLeftMagnet().getHeight() / 2, world.getLeftMagnet().getWidth(), world.getLeftMagnet().getHeight());
         sRenderer.setColor(Color.GREEN);
-        sRenderer.rect(world.getRightMagnet().getX() - world.getLeftMagnet().getWidth() / 2, world.getRightMagnet().getY() - world.getLeftMagnet().getHeight() / 2, world.getRightMagnet().getWidth(), world.getRightMagnet().getHeight());
+        sRenderer.rect(world.getRightMagnet().getX() - world.getRightMagnet().getWidth() / 2, world.getRightMagnet().getY() - world.getRightMagnet().getHeight() / 2, world.getRightMagnet().getWidth(), world.getRightMagnet().getHeight());
+        /* Rendering the enemies
+        ArrayIterator<Enemy> iterEnemy = new ArrayIterator<Enemy>(world.getEnemies());
+        while(iterEnemy.hasNext()){
+        	Enemy enemy = iterEnemy.next();
+        	if(enemy.getClass().getName() == "com.zngames.skymag.FreezerEnemy"){
+        		sRenderer.setColor(Color.CYAN);
+        		sRenderer.rect(enemy.getX() - enemy.getWidth() / 2, enemy.getY() - enemy.getHeight() / 2, enemy.getWidth(), enemy.getHeight());
+        	}
+        }*/
         sRenderer.end();
         
         sRenderer.begin(ShapeType.Line);
