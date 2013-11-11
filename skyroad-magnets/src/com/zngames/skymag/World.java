@@ -140,4 +140,12 @@ public class World {
 		this.wr = wr;
 	}
 	
+	public Array<Circle> getHoles(){
+		return holes;
+	}
+	
+	public float getFieldWidth(){
+		return fieldWidth;
+	}
+	
 }
