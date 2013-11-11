@@ -44,6 +44,6 @@ public abstract class Ship extends Entity {
 		position.add(velocity);
 	}
 	
-	public abstract boolean isFalling();
+	public abstract boolean isFalling(World world);
 	
 }

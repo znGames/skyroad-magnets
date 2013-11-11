@@ -49,7 +49,11 @@ public class WorldRenderer {
         //System.out.println(SkyMagGame.getWidth());
         //System.out.println(SkyMagGame.getHeight());
         //sRenderer.circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()/5, 20);
-        sRenderer.setColor(Color.WHITE);
+        if(world.getShip().isFalling(world)){
+        	sRenderer.setColor(Color.RED);
+        } else {
+        	sRenderer.setColor(Color.WHITE);
+        }
         sRenderer.circle(world.getShip().getX(), world.getShip().getY(), world.getShip().getWidth()/2);
         sRenderer.setColor(Color.RED);
         sRenderer.rect(world.getLeftMagnet().getX() - world.getLeftMagnet().getWidth() / 2, world.getLeftMagnet().getY() - world.getLeftMagnet().getHeight() / 2, world.getLeftMagnet().getWidth(), world.getLeftMagnet().getHeight());
