@@ -17,6 +17,7 @@ public class World {
 	float timeSinceLastCircle;
 	public Circle testCircle;
 	Array<Circle> holes;
+	Array<Enemy> enemies;
 	float muRadius;
 	float sigmaRadius;
 	float minDistanceBetweenHoles;
@@ -31,10 +32,13 @@ public class World {
 		Gdx.input.setInputProcessor(new InputHandler(this));
 		timeSinceLastCircle = 0;
 		holes = new Array<Circle>(false, 16);
+		enemies = new Array<Enemy>(false, 16);
 		muRadius = maxRadius*0.25f;
 		sigmaRadius = maxRadius*0.50f;
 		minDistanceBetweenHoles = ship.getWidth();
 		testCircle = new Circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()*1.2f, 50);
+		// Creating a freezer enemy
+		//enemies.add(new FreezerEnemy(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 3, 50, 50));
 	}
 	
 	public void update(float delta){
@@ -66,7 +70,7 @@ public class World {
 				}
 				abortionCount++;
 				if(abortionCount > 4){
-					System.out.println("ABORT !!!!!!");
+					//System.out.println("ABORT !!!!!!");
 					break;
 				}
 			}while(!newCircleIsOk);
@@ -76,11 +80,11 @@ public class World {
 			}
 		}
 		
-		ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
-		while(iter.hasNext()){
-			Circle circle = iter.next();
+		ArrayIterator<Circle> iterCircles = new ArrayIterator<Circle>(holes);
+		while(iterCircles.hasNext()){
+			Circle circle = iterCircles.next();
 			if(circle.y + circle.radius < 0){
-				iter.remove();
+				iterCircles.remove();
 			}
 			circle.setPosition(circle.x, circle.y-1);
 		}
@@ -92,6 +96,19 @@ public class World {
 		else{
 			sigmaRadius += sigmaRadius*0.001*delta;
 		}
+		
+		// Updating the enemies
+		ArrayIterator<Enemy> iterEnemies = new ArrayIterator<Enemy>(enemies);
+		while(iterEnemies.hasNext()){
+			Enemy enemy = iterEnemies.next();
+			enemy.update(this, delta);
+			// Removing the enemies from the array if they should stop existing
+			if(enemy.shouldStopExisting(this)){
+				iterEnemies.remove();
+			}
+		}
+		
+		// Making the ship advance
 		ship.advance(delta);
 	}
 	
@@ -104,7 +121,7 @@ public class World {
 			cpt++;
 		}while(cpt < 100 && u>Math.exp(-z*z*0.5));
 		
-		System.out.println("CPT : " + cpt);
+		//System.out.println("CPT : " + cpt);
 		return sigmaRadius*z + muRadius;
 	}
 
@@ -142,6 +159,10 @@ public class World {
 	
 	public Array<Circle> getHoles(){
 		return holes;
+	}
+	
+	public Array<Enemy> getEnemies(){
+		return enemies;
 	}
 	
 	public float getFieldWidth(){

@@ -13,6 +13,10 @@ public class Entity {
 		this.width = width;
 		this.height = height;
 	}
+	
+	public Entity(float x, float y, float width, float height){
+		this(new Vector2(x, y), width, height);
+	}
 
 	public Vector2 getPosition() {
 		return position;
