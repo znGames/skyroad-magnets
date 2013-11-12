@@ -38,7 +38,7 @@ public class World {
 		minDistanceBetweenHoles = ship.getWidth();
 		testCircle = new Circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()*1.2f, 50);
 		// Creating a freezer enemy
-		//enemies.add(new FreezerEnemy(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 3, 50, 50));
+		enemies.add(new FreezerEnemy(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 3));
 	}
 	
 	public void update(float delta){
@@ -106,6 +106,7 @@ public class World {
 			if(enemy.shouldStopExisting(this)){
 				iterEnemies.remove();
 			}
+			enemy.actOn(ship);
 		}
 		
 		// Making the ship advance
@@ -167,6 +168,14 @@ public class World {
 	
 	public float getFieldWidth(){
 		return fieldWidth;
+	}
+	
+	public float getLeftBorderXCoordinate(){
+		return (SkyMagGame.getWidth()-fieldWidth)/2;
+	}
+	
+	public float getRightBorderXCoordinate(){
+		return (SkyMagGame.getWidth()+fieldWidth)/2;
 	}
 	
 }

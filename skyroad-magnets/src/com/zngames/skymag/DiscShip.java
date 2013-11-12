@@ -1,6 +1,8 @@
 package com.zngames.skymag;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.collision.Segment;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
 
@@ -14,8 +16,7 @@ public class DiscShip extends Ship {
 	}
 	
 	public boolean isFalling(World world){
-		float fieldWidth = world.getFieldWidth();
-		if(position.x < (SkyMagGame.getWidth()-fieldWidth)/2 || position.x > (SkyMagGame.getWidth()+fieldWidth)/2){
+		if(position.x < world.getLeftBorderXCoordinate() || position.x > world.getRightBorderXCoordinate()){
 			return true;
 		}
 		
@@ -43,5 +44,11 @@ public class DiscShip extends Ship {
 			}
 		}
 		return false;
+	}
+	
+	public boolean overlapsRectangle(Rectangle rectangle){
+		if(rectangle.contains(position))
+			return true;
+		return false; // TODO
 	}
 }

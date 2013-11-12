@@ -1,5 +1,6 @@
 package com.zngames.skymag;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Ship extends Entity {
@@ -44,6 +45,11 @@ public abstract class Ship extends Entity {
 		position.add(velocity);
 	}
 	
+	public void changeVelocity(float x, float y){
+		velocity = new Vector2(x, y);
+	}
+	
 	public abstract boolean isFalling(World world);
 	
+	public abstract boolean overlapsRectangle(Rectangle rectangle);
 }
