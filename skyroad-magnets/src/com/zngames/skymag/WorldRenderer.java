@@ -59,15 +59,28 @@ public class WorldRenderer {
         sRenderer.rect(world.getLeftMagnet().getX() - world.getLeftMagnet().getWidth() / 2, world.getLeftMagnet().getY() - world.getLeftMagnet().getHeight() / 2, world.getLeftMagnet().getWidth(), world.getLeftMagnet().getHeight());
         sRenderer.setColor(Color.GREEN);
         sRenderer.rect(world.getRightMagnet().getX() - world.getRightMagnet().getWidth() / 2, world.getRightMagnet().getY() - world.getRightMagnet().getHeight() / 2, world.getRightMagnet().getWidth(), world.getRightMagnet().getHeight());
-        /* Rendering the enemies
         ArrayIterator<Enemy> iterEnemy = new ArrayIterator<Enemy>(world.getEnemies());
         while(iterEnemy.hasNext()){
         	Enemy enemy = iterEnemy.next();
         	if(enemy.getClass().getName() == "com.zngames.skymag.FreezerEnemy"){
         		sRenderer.setColor(Color.CYAN);
-        		sRenderer.rect(enemy.getX() - enemy.getWidth() / 2, enemy.getY() - enemy.getHeight() / 2, enemy.getWidth(), enemy.getHeight());
+        		/*
+        		float[] vertices = {(float) (world.getLeftBorderXCoordinate() - enemy.getWidth() + Math.cos(5.0*Math.PI/6)), (float) (enemy.getY() + Math.sin(5.0*Math.PI/6)), 
+        							(float) (world.getLeftBorderXCoordinate() - enemy.getWidth() + Math.cos(7.0*Math.PI/6)), (float) (enemy.getY() + Math.sin(7.0*Math.PI/6)),
+        							world.getLeftBorderXCoordinate() - enemy.getWidth() +  1, enemy.getY()};
+        		sRenderer.polygon(vertices);
+        		*/
+        		sRenderer.triangle((float) (World.getLeftBorderXCoordinate() - enemy.getWidth() + enemy.getWidth()*Math.cos(5.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(5.0*Math.PI/6)),
+        						   (float) (World.getLeftBorderXCoordinate() - enemy.getWidth() + enemy.getWidth()*Math.cos(7.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(7.0*Math.PI/6)),
+        						    World.getLeftBorderXCoordinate(), enemy.getY());
+        		sRenderer.triangle((float) (World.getRightBorderXCoordinate() + enemy.getWidth() + enemy.getWidth()*Math.cos(Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(Math.PI/6)),
+						   			(float) (World.getRightBorderXCoordinate() + enemy.getWidth() + enemy.getWidth()*Math.cos(-1.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(-1.0*Math.PI/6)),
+						   			World.getRightBorderXCoordinate(), enemy.getY());
+        		if(((FreezerEnemy) enemy).isFiring()){
+        			sRenderer.rect(World.getLeftBorderXCoordinate(), enemy.getY() - enemy.getWidth()/2, World.getFieldWidth(), enemy.getHeight());
+        		}
         	}
-        }*/
+        }
         sRenderer.end();
         
         sRenderer.begin(ShapeType.Line);

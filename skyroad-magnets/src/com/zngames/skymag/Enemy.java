@@ -16,4 +16,6 @@ public abstract class Enemy extends Entity {
 	
 	public abstract boolean shouldStopExisting(World world);
 	
+	public abstract void actOn(Ship ship);
+	
 }

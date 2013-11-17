@@ -1,6 +1,8 @@
 package com.zngames.skymag;
 
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
 
@@ -14,8 +16,7 @@ public class DiscShip extends Ship {
 	}
 	
 	public boolean isFalling(World world){
-		float fieldWidth = world.getFieldWidth();
-		if(position.x < (SkyMagGame.getWidth()-fieldWidth)/2 || position.x > (SkyMagGame.getWidth()+fieldWidth)/2){
+		if(position.x < World.getLeftBorderXCoordinate() || position.x > World.getRightBorderXCoordinate()){
 			return true;
 		}
 		
@@ -43,5 +44,29 @@ public class DiscShip extends Ship {
 			}
 		}
 		return false;
+	}
+	
+	public boolean overlapsRectangle(Rectangle rectangle){
+		// see http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection/402010#402010
+		float circleRadius = getWidth()/2;
+		Vector2 rectangleCenter = rectangle.getCenter(new Vector2());
+		
+		float circleDistanceX = Math.abs(getX() - rectangleCenter.x);
+		float circleDistanceY = Math.abs(getY() - rectangleCenter.y);
+		
+		if(circleDistanceX > (rectangle.getWidth()/2 + circleRadius))
+			return false;
+		
+		if(circleDistanceY > (rectangle.getHeight()/2 + circleRadius))
+			return false;
+		
+		if(circleDistanceX <= (rectangle.getWidth()/2))
+			return true;
+		
+		if(circleDistanceY <= (rectangle.getHeight()/2))
+			return true;
+		
+		return (circleDistanceX - rectangle.getWidth()/2)*(circleDistanceX - rectangle.getWidth()/2) 
+					+ (circleDistanceY - rectangle.getHeight()/2)*(circleDistanceY - rectangle.getHeight()/2) <= (circleRadius*circleRadius)/4;
 	}
 }
