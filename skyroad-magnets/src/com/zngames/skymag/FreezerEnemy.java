@@ -1,5 +1,6 @@
 package com.zngames.skymag;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class FreezerEnemy extends Enemy {
@@ -8,6 +9,7 @@ public class FreezerEnemy extends Enemy {
 	private boolean isFiring = false;
 	public final float speed = 30;
 	public final static float timeUntilFire = 5;
+	public final static float firingTime = 2;
 	
 	public FreezerEnemy(Vector2 position, float width, float height){
 		super(position, width, height);
@@ -38,12 +40,13 @@ public class FreezerEnemy extends Enemy {
 	}
 	
 	public boolean shouldStopExisting(World world){
-		return timeSinceCreation >= timeUntilFire + 2;
+		return timeSinceCreation >= timeUntilFire + firingTime;
 	}
 	
 	public void actOn(Ship ship){
-		//if(isFiring && )
-		ship.changeVelocity(0, 0);
+		if(isFiring && ship.overlapsRectangle(new Rectangle(World.getLeftBorderXCoordinate(), getY() - getHeight()/2, World.getFieldWidth(), getHeight()))){
+			ship.freeze();
+		}
 	}
 	
 	public boolean isFiring(){

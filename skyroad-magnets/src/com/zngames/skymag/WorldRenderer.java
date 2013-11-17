@@ -70,14 +70,14 @@ public class WorldRenderer {
         							world.getLeftBorderXCoordinate() - enemy.getWidth() +  1, enemy.getY()};
         		sRenderer.polygon(vertices);
         		*/
-        		sRenderer.triangle((float) (world.getLeftBorderXCoordinate() - enemy.getWidth() + enemy.getWidth()*Math.cos(5.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(5.0*Math.PI/6)),
-        						   (float) (world.getLeftBorderXCoordinate() - enemy.getWidth() + enemy.getWidth()*Math.cos(7.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(7.0*Math.PI/6)),
-        						    world.getLeftBorderXCoordinate(), enemy.getY());
-        		sRenderer.triangle((float) (world.getRightBorderXCoordinate() + enemy.getWidth() + enemy.getWidth()*Math.cos(Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(Math.PI/6)),
-						   			(float) (world.getRightBorderXCoordinate() + enemy.getWidth() + enemy.getWidth()*Math.cos(-1.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(-1.0*Math.PI/6)),
-						   			world.getRightBorderXCoordinate(), enemy.getY());
+        		sRenderer.triangle((float) (World.getLeftBorderXCoordinate() - enemy.getWidth() + enemy.getWidth()*Math.cos(5.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(5.0*Math.PI/6)),
+        						   (float) (World.getLeftBorderXCoordinate() - enemy.getWidth() + enemy.getWidth()*Math.cos(7.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(7.0*Math.PI/6)),
+        						    World.getLeftBorderXCoordinate(), enemy.getY());
+        		sRenderer.triangle((float) (World.getRightBorderXCoordinate() + enemy.getWidth() + enemy.getWidth()*Math.cos(Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(Math.PI/6)),
+						   			(float) (World.getRightBorderXCoordinate() + enemy.getWidth() + enemy.getWidth()*Math.cos(-1.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(-1.0*Math.PI/6)),
+						   			World.getRightBorderXCoordinate(), enemy.getY());
         		if(((FreezerEnemy) enemy).isFiring()){
-        			sRenderer.rect(world.getLeftBorderXCoordinate(), enemy.getY() - enemy.getWidth()/2, world.getFieldWidth(), enemy.getHeight());
+        			sRenderer.rect(World.getLeftBorderXCoordinate(), enemy.getY() - enemy.getWidth()/2, World.getFieldWidth(), enemy.getHeight());
         		}
         	}
         }

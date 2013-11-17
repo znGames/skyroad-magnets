@@ -21,7 +21,7 @@ public class World {
 	float muRadius;
 	float sigmaRadius;
 	float minDistanceBetweenHoles;
-	final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
+	static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
 	final float maxRadius = fieldWidth * 0.2f;
 	
 	public World(SkyMagGame game){
@@ -166,15 +166,15 @@ public class World {
 		return enemies;
 	}
 	
-	public float getFieldWidth(){
+	static public float getFieldWidth(){
 		return fieldWidth;
 	}
 	
-	public float getLeftBorderXCoordinate(){
+	static public float getLeftBorderXCoordinate(){
 		return (SkyMagGame.getWidth()-fieldWidth)/2;
 	}
 	
-	public float getRightBorderXCoordinate(){
+	static public float getRightBorderXCoordinate(){
 		return (SkyMagGame.getWidth()+fieldWidth)/2;
 	}
 	
