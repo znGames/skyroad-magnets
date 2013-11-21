@@ -1,5 +1,7 @@
 package com.zngames.skymag;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
@@ -114,16 +116,28 @@ public class World {
 	}
 	
 	public float generateRadius(float max){
-		float z, u;
+		/*float z, u;
 		int cpt = 0;
 		do{
-			z = MathUtils.random(max);
+			z = MathUtils.random(max) - muRadius;
 			u = MathUtils.random();
 			cpt++;
 		}while(cpt < 100 && u>Math.exp(-z*z*0.5));
 		
-		//System.out.println("CPT : " + cpt);
-		return sigmaRadius*z + muRadius;
+		System.out.println("CPT : " + cpt);
+		//return sigmaRadius*z + muRadius;
+		return z + muRadius;*/
+		
+		float z;
+		int cpt = 0;
+		do{
+			Random random = new Random();
+			z = (float) random.nextGaussian()*sigmaRadius + muRadius;
+			cpt++;
+		}while(z < 0 && z > max);
+		
+		System.out.println("CPT : " + cpt);
+		return z;
 	}
 
 	public Ship getShip() {
