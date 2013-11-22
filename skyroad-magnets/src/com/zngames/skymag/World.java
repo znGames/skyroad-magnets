@@ -24,7 +24,8 @@ public class World {
 	float sigmaRadius;
 	float minDistanceBetweenHoles;
 	static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
-	final float maxRadius = fieldWidth * 0.2f;
+	final float maxRadius = fieldWidth * 0.4f;
+	final float minRadius = fieldWidth/8;
 	
 	public World(SkyMagGame game){
 		this.game = game;
@@ -35,7 +36,7 @@ public class World {
 		timeSinceLastCircle = 0;
 		holes = new Array<Circle>(false, 16);
 		enemies = new Array<Enemy>(false, 16);
-		muRadius = maxRadius*0.25f;
+		muRadius = (maxRadius-minRadius)*0.25f + minRadius;
 		sigmaRadius = maxRadius*0.50f;
 		minDistanceBetweenHoles = ship.getWidth();
 		testCircle = new Circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()*1.2f, 50);
@@ -60,7 +61,7 @@ public class World {
 			do{
 				newCircleIsOk = true;
 				x = MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth);
-				radius = generateRadius(radius);
+				radius = generateRadius(minRadius, radius);
 				ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
 				while(iter.hasNext()){
 					Circle circle = iter.next();
@@ -93,10 +94,10 @@ public class World {
 		//testCircle.setPosition(testCircle.x, testCircle.y-1);
 		//TODO
 		if(muRadius < maxRadius){
-			muRadius += maxRadius*0.01*delta;
+			muRadius += maxRadius*0.001*delta;
 		}
 		else{
-			sigmaRadius += sigmaRadius*0.001*delta;
+			sigmaRadius += sigmaRadius*0.0001*delta;
 		}
 		
 		// Updating the enemies
@@ -115,7 +116,7 @@ public class World {
 		ship.advance(delta);
 	}
 	
-	public float generateRadius(float max){
+	public float generateRadius(float min, float max){
 		/*float z, u;
 		int cpt = 0;
 		do{
@@ -134,7 +135,7 @@ public class World {
 			Random random = new Random();
 			z = (float) random.nextGaussian()*sigmaRadius + muRadius;
 			cpt++;
-		}while(z < 0 && z > max);
+		}while(z < min || z > max);
 		
 		System.out.println("CPT : " + cpt);
 		return z;
