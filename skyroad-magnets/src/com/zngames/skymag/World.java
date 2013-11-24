@@ -1,5 +1,7 @@
 package com.zngames.skymag;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
@@ -22,7 +24,8 @@ public class World {
 	float sigmaRadius;
 	float minDistanceBetweenHoles;
 	static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
-	final float maxRadius = fieldWidth * 0.2f;
+	final float maxRadius = fieldWidth * 0.4f;
+	final float minRadius = fieldWidth/8;
 	
 	public World(SkyMagGame game){
 		this.game = game;
@@ -33,7 +36,7 @@ public class World {
 		timeSinceLastCircle = 0;
 		holes = new Array<Circle>(false, 16);
 		enemies = new Array<Enemy>(false, 16);
-		muRadius = maxRadius*0.25f;
+		muRadius = (maxRadius-minRadius)*0.25f + minRadius;
 		sigmaRadius = maxRadius*0.50f;
 		minDistanceBetweenHoles = ship.getWidth();
 		testCircle = new Circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()*1.2f, 50);
@@ -42,60 +45,8 @@ public class World {
 	}
 	
 	public void update(float delta){
-		//System.out.println("Max radius : " + maxRadius);
-		//System.out.println("Mu radius : " + muRadius);
-		//System.out.println("Sigma radius : " + sigmaRadius);
-		timeSinceLastCircle += delta; 
-		if(MathUtils.random(timeSinceLastCircle) > 1.5){
-			//System.out.println("GENERATE !");
-			timeSinceLastCircle = 0;
-			//holes.add(new Circle(MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth), SkyMagGame.getHeight()+maxRadius, generateRadius()));
-			float x;
-			float y = SkyMagGame.getHeight()+maxRadius;
-			float radius = maxRadius;
-			boolean newCircleIsOk;
-			int abortionCount = 0;
-			do{
-				newCircleIsOk = true;
-				x = MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth);
-				radius = generateRadius(radius);
-				ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
-				while(iter.hasNext()){
-					Circle circle = iter.next();
-					if(Math.sqrt((circle.x-x)*(circle.x-x) + (circle.y-y)*(circle.y-y)) < radius + minDistanceBetweenHoles + circle.radius){
-						newCircleIsOk = false;
-						//System.out.println("NOT OK !!!!!!!!!!!!!");
-						break;
-					}
-				}
-				abortionCount++;
-				if(abortionCount > 4){
-					//System.out.println("ABORT !!!!!!");
-					break;
-				}
-			}while(!newCircleIsOk);
-			
-			if(newCircleIsOk){
-				holes.add(new Circle(x,y,radius));
-			}
-		}
-		
-		ArrayIterator<Circle> iterCircles = new ArrayIterator<Circle>(holes);
-		while(iterCircles.hasNext()){
-			Circle circle = iterCircles.next();
-			if(circle.y + circle.radius < 0){
-				iterCircles.remove();
-			}
-			circle.setPosition(circle.x, circle.y-1);
-		}
-		//testCircle.setPosition(testCircle.x, testCircle.y-1);
-		//TODO
-		if(muRadius < maxRadius){
-			muRadius += maxRadius*0.01*delta;
-		}
-		else{
-			sigmaRadius += sigmaRadius*0.001*delta;
-		}
+		// Updating the holes (generating new holes, deleting old holes, etc.)
+		updateHoles(delta);
 		
 		// Updating the enemies
 		ArrayIterator<Enemy> iterEnemies = new ArrayIterator<Enemy>(enemies);
@@ -113,17 +64,72 @@ public class World {
 		ship.advance(delta);
 	}
 	
-	public float generateRadius(float max){
-		float z, u;
+	public void updateHoles(float delta){
+		timeSinceLastCircle += delta; 
+		// Generating a circle every 2 seconds approximatively
+		if(MathUtils.random(timeSinceLastCircle) > 1.5){
+			timeSinceLastCircle = 0;
+			float x;
+			float y = SkyMagGame.getHeight()+maxRadius;
+			float radius = maxRadius;
+			boolean newCircleIsOk;
+			int abortionCount = 0;
+			do{
+				newCircleIsOk = true;
+				x = MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth);
+				radius = generateRadius(minRadius, radius);
+				// There should be a more efficient way to do this
+				ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
+				while(iter.hasNext()){
+					Circle circle = iter.next();
+					if(Math.sqrt((circle.x-x)*(circle.x-x) + (circle.y-y)*(circle.y-y)) < radius + minDistanceBetweenHoles + circle.radius){
+						newCircleIsOk = false;
+						break;
+					}
+				}
+				abortionCount++;
+				if(abortionCount > 4){
+					break;
+				}
+			}while(!newCircleIsOk);
+			
+			if(newCircleIsOk){
+				holes.add(new Circle(x,y,radius));
+			}
+		}
+		
+		// Removing old holes and making the current holes advance
+		ArrayIterator<Circle> iterCircles = new ArrayIterator<Circle>(holes);
+		while(iterCircles.hasNext()){
+			Circle circle = iterCircles.next();
+			if(circle.y + circle.radius < 0){
+				iterCircles.remove();
+			}
+			circle.setPosition(circle.x, circle.y-1);
+		}
+		
+		// Updating the hole generation gaussian parameters
+		if(muRadius < maxRadius){
+			muRadius += maxRadius*0.001*delta;
+		}
+		else{
+			sigmaRadius += sigmaRadius*0.0001*delta;
+		}
+	}
+	
+	public float generateRadius(float min, float max){
+		float z;
 		int cpt = 0;
 		do{
-			z = MathUtils.random(max);
-			u = MathUtils.random();
+			Random random = new Random();
+			z = (float) random.nextGaussian()*sigmaRadius + muRadius;
 			cpt++;
-		}while(cpt < 100 && u>Math.exp(-z*z*0.5));
+			if(cpt>100){
+				return random.nextFloat()*(max - min) + min;
+			}
+		}while(z < min || z > max);
 		
-		//System.out.println("CPT : " + cpt);
-		return sigmaRadius*z + muRadius;
+		return z;
 	}
 
 	public Ship getShip() {
