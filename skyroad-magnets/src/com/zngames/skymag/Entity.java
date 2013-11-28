@@ -26,6 +26,11 @@ public class Entity {
 		this.position = position;
 	}
 	
+	public void setPosition(float x, float y){
+		this.position.x = x;
+		this.position.y = y;
+	}
+	
 	public float getX(){
 		return position.x;
 	}

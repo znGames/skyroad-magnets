@@ -45,6 +45,12 @@ public class WorldRenderer {
         	Circle circle = iterCircles.next();
         	sRenderer.circle(circle.x, circle.y, circle.radius);
         }
+        sRenderer.setColor(Color.YELLOW);
+        ArrayIterator<Coin> iterCoins = new ArrayIterator<Coin>(world.getCoins());
+        while(iterCoins.hasNext()){
+        	Coin coin = iterCoins.next();
+        	sRenderer.circle(coin.getX(), coin.getY(), coin.getWidth());
+        }
         //sRenderer.circle(SkyMagGame.getWidth()/4, SkyMagGame.getHeight()/4, 10);
         //System.out.println(SkyMagGame.getWidth());
         //System.out.println(SkyMagGame.getHeight());
