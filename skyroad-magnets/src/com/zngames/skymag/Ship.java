@@ -1,5 +1,6 @@
 package com.zngames.skymag;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -8,6 +9,7 @@ public abstract class Ship extends Entity {
 	Magnet leftMagnet;
 	Magnet rightMagnet;
 	Vector2 velocity;
+	float coinCounter = 0;
 	static final float freezingTime = 2;
 	float timeUntilUnfreezing = 0;
 
@@ -34,6 +36,10 @@ public abstract class Ship extends Entity {
 		position.add(velocity);
 	}
 	
+	public void increaseCoinCounter(int value){
+		coinCounter += value;
+	}
+	
 	public void changeVelocity(float x, float y){
 		velocity = new Vector2(x, y);
 	}
@@ -45,4 +51,6 @@ public abstract class Ship extends Entity {
 	public abstract boolean isFalling(World world);
 	
 	public abstract boolean overlapsRectangle(Rectangle rectangle);
+	
+	public abstract boolean overlapsCircle(Circle circle);
 }

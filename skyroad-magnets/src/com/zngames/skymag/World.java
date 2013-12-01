@@ -20,12 +20,16 @@ public class World {
 	public Circle testCircle;
 	Array<Circle> holes;
 	Array<Enemy> enemies;
+	Array<Coin> coins;
+	float globalSpeed;
 	float muRadius;
 	float sigmaRadius;
 	float minDistanceBetweenHoles;
+	float minDistanceBetweenHolesAndCoins;
 	static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
 	final float maxRadius = fieldWidth * 0.4f;
 	final float minRadius = fieldWidth/8;
+	final float chanceOfCoinGeneration = 0.25f;
 	
 	public World(SkyMagGame game){
 		this.game = game;
@@ -36,32 +40,36 @@ public class World {
 		timeSinceLastCircle = 0;
 		holes = new Array<Circle>(false, 16);
 		enemies = new Array<Enemy>(false, 16);
+		coins = new Array<Coin>(false, 16);
+		globalSpeed = 60;
 		muRadius = (maxRadius-minRadius)*0.25f + minRadius;
 		sigmaRadius = maxRadius*0.50f;
 		minDistanceBetweenHoles = ship.getWidth();
+		minDistanceBetweenHolesAndCoins = Coin.coinRadius;
 		testCircle = new Circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()*1.2f, 50);
 		// Creating a freezer enemy
 		enemies.add(new FreezerEnemy(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 3));
 	}
 	
 	public void update(float delta){
+		// Updating the game global speed
+		updateGlobalSpeed(delta);
+		
 		// Updating the holes (generating new holes, deleting old holes, etc.)
 		updateHoles(delta);
 		
+		// Updating the coins
+		updateCoins(delta);
+		
 		// Updating the enemies
-		ArrayIterator<Enemy> iterEnemies = new ArrayIterator<Enemy>(enemies);
-		while(iterEnemies.hasNext()){
-			Enemy enemy = iterEnemies.next();
-			enemy.update(this, delta);
-			// Removing the enemies from the array if they should stop existing
-			if(enemy.shouldStopExisting(this)){
-				iterEnemies.remove();
-			}
-			enemy.actOn(ship);
-		}
+		updateEnemies(delta);
 		
 		// Making the ship advance
 		ship.advance(delta);
+	}
+	
+	public void updateGlobalSpeed(float delta){
+		globalSpeed+=0.3*delta;
 	}
 	
 	public void updateHoles(float delta){
@@ -95,6 +103,9 @@ public class World {
 			
 			if(newCircleIsOk){
 				holes.add(new Circle(x,y,radius));
+				if(MathUtils.randomBoolean(chanceOfCoinGeneration)){
+					generateCircleOfCoins(x, y, radius);
+				}
 			}
 		}
 		
@@ -105,16 +116,41 @@ public class World {
 			if(circle.y + circle.radius < 0){
 				iterCircles.remove();
 			}
-			circle.setPosition(circle.x, circle.y-1);
+			circle.setPosition(circle.x, circle.y-globalSpeed*delta);
 		}
 		
 		// Updating the hole generation gaussian parameters
 		if(muRadius < maxRadius){
 			muRadius += maxRadius*0.001*delta;
-		}
+		} 
 		else{
 			sigmaRadius += sigmaRadius*0.0001*delta;
 		}
+	}
+	
+	public void updateEnemies(float delta){
+		ArrayIterator<Enemy> iterEnemies = new ArrayIterator<Enemy>(enemies);
+		while(iterEnemies.hasNext()){
+			Enemy enemy = iterEnemies.next();
+			enemy.update(this, delta);
+			// Removing the enemies from the array if they should stop existing
+			if(enemy.shouldStopExisting(this)){
+				iterEnemies.remove();
+			}
+			enemy.actOn(ship);
+		}
+	}
+	
+	public void updateCoins(float delta){
+        ArrayIterator<Coin> iterCoins = new ArrayIterator<Coin>(coins);
+        while(iterCoins.hasNext()){
+        	Coin coin = iterCoins.next();
+        	if(coin.actOn(ship)){
+        		iterCoins.remove();
+        	} else{
+        		coin.setPosition(coin.getX(), coin.getY()-globalSpeed*delta);
+        	}
+        }
 	}
 	
 	public float generateRadius(float min, float max){
@@ -132,6 +168,25 @@ public class World {
 		return z;
 	}
 
+	public void generateCircleOfCoins(float x, float y, float radius){
+		float distanceFromHoleCenterToCoinCenter = radius+Coin.coinRadius+this.minDistanceBetweenHolesAndCoins;
+		
+		int nbCircles = (int) ( (MathUtils.PI*distanceFromHoleCenterToCoinCenter) / Coin.coinRadius ); 
+		float leftSpace = 2*( (MathUtils.PI*distanceFromHoleCenterToCoinCenter) % Coin.coinRadius );
+		
+		float spaceBetweenCircles = leftSpace/nbCircles;
+		float angleBetweenCircles = (float) (2*Math.atan2(Coin.coinRadius+(spaceBetweenCircles*1.0f/2), distanceFromHoleCenterToCoinCenter));
+		
+		float currentAngle = 0;
+		for(int i=0;i<nbCircles;i++){
+			float xCoordinate = x + distanceFromHoleCenterToCoinCenter*MathUtils.cos(currentAngle);
+			if(xCoordinate + Coin.coinRadius < World.getRightBorderXCoordinate() && xCoordinate - Coin.coinRadius > World.getLeftBorderXCoordinate()){
+				coins.add(new Coin(xCoordinate, y + distanceFromHoleCenterToCoinCenter*MathUtils.sin(currentAngle)));
+			}
+			currentAngle += angleBetweenCircles;
+		}
+	}
+	
 	public Ship getShip() {
 		return ship;
 	}
@@ -170,6 +225,10 @@ public class World {
 	
 	public Array<Enemy> getEnemies(){
 		return enemies;
+	}
+	
+	public Array<Coin> getCoins(){
+		return coins;
 	}
 	
 	static public float getFieldWidth(){
