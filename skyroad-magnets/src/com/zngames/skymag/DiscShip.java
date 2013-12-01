@@ -69,4 +69,8 @@ public class DiscShip extends Ship {
 		return (circleDistanceX - rectangle.getWidth()/2)*(circleDistanceX - rectangle.getWidth()/2) 
 					+ (circleDistanceY - rectangle.getHeight()/2)*(circleDistanceY - rectangle.getHeight()/2) <= (circleRadius*circleRadius)/4;
 	}
+	
+	public boolean overlapsCircle(Circle circle){
+		return circle.overlaps(new Circle(getX(), getY(), getWidth()/2));
+	}
 }
