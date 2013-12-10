@@ -17,7 +17,6 @@ public class World {
 	Magnet leftMagnet;
 	Magnet rightMagnet;
 	float timeSinceLastCircle;
-	public Circle testCircle;
 	Array<Circle> holes;
 	Array<Enemy> enemies;
 	Array<Coin> coins;
@@ -26,6 +25,9 @@ public class World {
 	float sigmaRadius;
 	float minDistanceBetweenHoles;
 	float minDistanceBetweenHolesAndCoins;
+	Circle pendingHole;
+	float pendingDistance;
+	float surplusDistance;
 	static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
 	final float maxRadius = fieldWidth * 0.4f;
 	final float minRadius = fieldWidth/8;
@@ -46,7 +48,8 @@ public class World {
 		sigmaRadius = maxRadius*0.50f;
 		minDistanceBetweenHoles = ship.getWidth();
 		minDistanceBetweenHolesAndCoins = Coin.coinRadius;
-		testCircle = new Circle(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight()*1.2f, 50);
+		pendingDistance = 0;
+		surplusDistance = -1;
 		// Creating a freezer enemy
 		enemies.add(new FreezerEnemy(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 3));
 	}
@@ -74,38 +77,49 @@ public class World {
 	
 	public void updateHoles(float delta){
 		timeSinceLastCircle += delta; 
-		// Generating a circle every 2 seconds approximatively
-		if(MathUtils.random(timeSinceLastCircle) > 1.5){
+		if(surplusDistance > 0){
+			pendingDistance += globalSpeed*delta;
+			if(pendingDistance >= surplusDistance){
+				holes.add(pendingHole);
+				if(MathUtils.randomBoolean(chanceOfCoinGeneration)){
+					generateCircleOfCoins(pendingHole.x, pendingHole.y, pendingHole.radius);
+				}
+				surplusDistance = -1;
+				pendingDistance = 0;
+				timeSinceLastCircle = 0;
+			}
+		}
+		// Generating a circle every 2 seconds approximately
+		else if(MathUtils.random(timeSinceLastCircle) > 1.5){
+			System.out.println("Generating");
 			timeSinceLastCircle = 0;
 			float x;
 			float y = SkyMagGame.getHeight()+maxRadius;
-			float radius = maxRadius;
-			boolean newCircleIsOk;
-			int abortionCount = 0;
-			do{
-				newCircleIsOk = true;
-				x = MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth);
-				radius = generateRadius(minRadius, radius);
-				// There should be a more efficient way to do this
-				ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
-				while(iter.hasNext()){
-					Circle circle = iter.next();
-					if(Math.sqrt((circle.x-x)*(circle.x-x) + (circle.y-y)*(circle.y-y)) < radius + minDistanceBetweenHoles + circle.radius){
-						newCircleIsOk = false;
-						break;
-					}
-				}
-				abortionCount++;
-				if(abortionCount > 4){
-					break;
-				}
-			}while(!newCircleIsOk);
+			float radius;
+			float spaceDifferential;
 			
-			if(newCircleIsOk){
+			surplusDistance = -1;
+			x = MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth);
+			radius = generateRadius(minRadius, maxRadius);
+			// There should be a more efficient way to do this
+			ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
+			while(iter.hasNext()){
+				Circle circle = iter.next();
+				spaceDifferential = (float) (radius + minDistanceBetweenHoles + circle.radius -  Math.sqrt((circle.x-x)*(circle.x-x) + (circle.y-y)*(circle.y-y)));
+				System.out.println("Space differential : " + spaceDifferential);
+				if(spaceDifferential > 0){
+					surplusDistance = (float) Math.max(surplusDistance, Math.sin(Math.atan2(y - circle.y, x - circle.x))*spaceDifferential);
+				}
+			}
+			
+			if(surplusDistance <= 0){
 				holes.add(new Circle(x,y,radius));
 				if(MathUtils.randomBoolean(chanceOfCoinGeneration)){
 					generateCircleOfCoins(x, y, radius);
 				}
+			} else {
+				pendingHole = new Circle(x,y,radius);
+				pendingDistance = 0;
 			}
 		}
 		
