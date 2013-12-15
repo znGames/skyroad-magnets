@@ -96,19 +96,15 @@ public class World {
 			float x;
 			float y = SkyMagGame.getHeight()+maxRadius;
 			float radius;
-			float spaceDifferential;
 			
 			surplusDistance = -1;
 			x = MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth);
 			radius = generateRadius(minRadius, maxRadius);
-			// There should be a more efficient way to do this
 			ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
 			while(iter.hasNext()){
 				Circle circle = iter.next();
-				spaceDifferential = (float) (radius + minDistanceBetweenHoles + circle.radius -  Math.sqrt((circle.x-x)*(circle.x-x) + (circle.y-y)*(circle.y-y)));
-				System.out.println("Space differential : " + spaceDifferential);
-				if(spaceDifferential > 0){
-					surplusDistance = (float) Math.max(surplusDistance, Math.sin(Math.atan2(y - circle.y, x - circle.x))*spaceDifferential);
+				if(Math.sqrt((circle.x-x)*(circle.x-x) + (circle.y-y)*(circle.y-y)) < radius + minDistanceBetweenHoles + circle.radius){
+					surplusDistance = (float) Math.sqrt((radius + minDistanceBetweenHoles + circle.radius)*(radius + minDistanceBetweenHoles + circle.radius) - (circle.x-x)*(circle.x-x)) - Math.abs(circle.y-y);
 				}
 			}
 			
