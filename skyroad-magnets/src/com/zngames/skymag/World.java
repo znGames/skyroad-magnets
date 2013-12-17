@@ -253,4 +253,8 @@ public class World {
 		return (SkyMagGame.getWidth()+fieldWidth)/2;
 	}
 	
+	static public float getMiddleBorderXCoordinate(){
+		return SkyMagGame.getWidth()/2;
+	}
+	
 }
