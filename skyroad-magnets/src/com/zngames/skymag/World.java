@@ -50,8 +50,8 @@ public class World {
 		minDistanceBetweenHolesAndCoins = Coin.coinRadius;
 		pendingDistance = 0;
 		surplusDistance = -1;
-		// Creating a freezer enemy
-		enemies.add(new FreezerEnemy(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 3));
+		enemies.add(new ZigzagEnemy());
+		//enemies.add(new FreezerEnemy(SkyMagGame.getWidth() / 2, SkyMagGame.getHeight() / 3)); // Creating a freezer enemy
 	}
 	
 	public void update(float delta){
@@ -251,6 +251,10 @@ public class World {
 	
 	static public float getRightBorderXCoordinate(){
 		return (SkyMagGame.getWidth()+fieldWidth)/2;
+	}
+	
+	static public float getMiddleBorderXCoordinate(){
+		return SkyMagGame.getWidth()/2;
 	}
 	
 }
