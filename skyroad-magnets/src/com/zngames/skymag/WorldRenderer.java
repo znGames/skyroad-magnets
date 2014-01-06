@@ -85,6 +85,9 @@ public class WorldRenderer {
         		if(((FreezerEnemy) enemy).isFiring()){
         			sRenderer.rect(World.getLeftBorderXCoordinate(), enemy.getY() - enemy.getWidth()/2, World.getFieldWidth(), enemy.getHeight());
         		}
+        	}else if(enemy.getClass().getName() == "com.zngames.skymag.ZigzagEnemy"){
+        		sRenderer.setColor(Color.MAGENTA);
+        		sRenderer.circle(enemy.getX(), enemy.getY(), enemy.getWidth()/2);
         	}
         }
         sRenderer.end();
