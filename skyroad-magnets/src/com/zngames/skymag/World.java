@@ -29,8 +29,9 @@ public class World {
 	float pendingDistance;
 	float surplusDistance;
 	static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
+	static final float bridgeWidth = SkyMagGame.getWidth() / 32;
 	final float maxRadius = fieldWidth * 0.4f;
-	final float minRadius = fieldWidth/8;
+	final float minRadius = fieldWidth / 8;
 	final float chanceOfCoinGeneration = 0.25f;
 	
 	public World(SkyMagGame game){
