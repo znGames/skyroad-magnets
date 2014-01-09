@@ -3,12 +3,16 @@ package com.zngames.skymag;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 
+@SuppressWarnings("serial")
 public class Hole extends Circle {
 	boolean bridged;
 	float bridgeStartX;
 	float bridgeStartY;
 	float bridgeEndX;
 	float bridgeEndY;
+	double angle;
+	double cosAngle;
+	double sinAngle;
 	
 	public Hole(float x, float y, float radius){
 		super(x,y,radius);
@@ -19,9 +23,15 @@ public class Hole extends Circle {
 		super(x,y,radius);
 		if(bridged){
 			bridged = true;
-			double angle = MathUtils.random(MathUtils.PI);
-			double cosAngle = Math.cos(angle);
-			double sinAngle = Math.sin(angle);
+			if(x-radius < World.getLeftBorderXCoordinate()){
+				angle = MathUtils.random((float) (MathUtils.PI*1.0/4), (float) Math.min(Math.acos((World.getLeftBorderXCoordinate()-x)*1.0/radius), MathUtils.PI*3.0/4));
+			} else if(x+radius > World.getRightBorderXCoordinate()){
+				angle = MathUtils.random((float) Math.max(Math.acos((World.getRightBorderXCoordinate()-x)*1.0/radius), MathUtils.PI*1.0/4), (float) (MathUtils.PI*3.0/4));
+			} else{
+				angle = MathUtils.random((float) (MathUtils.PI*1.0/4), (float) (MathUtils.PI*3.0/4));
+			}
+			cosAngle = Math.cos(angle);
+			sinAngle = Math.sin(angle);
 			bridgeStartX = (float) (x + radius*cosAngle);
 			bridgeStartY = (float) (y + radius*sinAngle);
 			bridgeEndX = (float) (x - radius*cosAngle);
@@ -37,5 +47,8 @@ public class Hole extends Circle {
 		}else{
 			bridged = false;
 		}
+	}
+	public boolean isBridged(){
+		return bridged;
 	}
 }

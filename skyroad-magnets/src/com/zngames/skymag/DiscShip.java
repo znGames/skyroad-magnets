@@ -20,11 +20,11 @@ public class DiscShip extends Ship {
 			return true;
 		}
 		
-		Array<Circle> holes = world.getHoles();
-		ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
+		Array<Hole> holes = world.getHoles();
+		ArrayIterator<Hole> iter = new ArrayIterator<Hole>(holes);
 		
 		while(iter.hasNext()){
-			Circle circle = iter.next();
+			Hole circle = iter.next();
 			if(circle.contains(position)){
 				int nbConsecutivePoints = 0;
 				for(int i=0;i<gridCos.length;i++){
