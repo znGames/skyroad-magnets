@@ -21,8 +21,8 @@ public class Hole extends Circle {
 	
 	public Hole(float x, float y, float radius, boolean bridged){
 		super(x,y,radius);
+		this.bridged = bridged;
 		if(bridged){
-			bridged = true;
 			if(x-radius < World.getLeftBorderXCoordinate()){
 				angle = MathUtils.random((float) (MathUtils.PI*1.0/4), (float) Math.min(Math.acos((World.getLeftBorderXCoordinate()-x)*1.0/radius), MathUtils.PI*3.0/4));
 			} else if(x+radius > World.getRightBorderXCoordinate()){
@@ -36,16 +36,6 @@ public class Hole extends Circle {
 			bridgeStartY = (float) (y + radius*sinAngle);
 			bridgeEndX = (float) (x - radius*cosAngle);
 			bridgeEndY = (float) (y - radius*sinAngle);
-			//x1 = bridgeStartX - World.bridgeWidth*sinAngle*0.5f;
-			//y1 = bridgeStartY + World.bridgeWidth*cosAngle*0.5f;
-			//x1 = bridgeStartX + World.bridgeWidth*sinAngle*0.5f;
-			//x1 = bridgeStartY - World.bridgeWidth*cosAngle*0.5f;
-			//x1 = bridgeStopX - World.bridgeWidth*sinAngle*0.5f;
-			//x1 = bridgeStopY + World.bridgeWidth*cosAngle*0.5f;
-			//x1 = bridgeStopX + World.bridgeWidth*sinAngle*0.5f;
-			//x1 = bridgeStopY - World.bridgeWidth*cosAngle*0.5f;
-		}else{
-			bridged = false;
 		}
 	}
 	public boolean isBridged(){

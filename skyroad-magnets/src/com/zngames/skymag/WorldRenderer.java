@@ -43,18 +43,6 @@ public class WorldRenderer {
         while(iterCircles.hasNext()){
         	Hole circle = iterCircles.next();
         	sRenderer.circle(circle.x, circle.y, circle.radius);
-        	if(circle.isBridged()){
-        		sRenderer.setColor(new Color(1, 0.54f, 0, 1));
-        		float[] bridgeVertices = {  (float) (circle.bridgeStartX - World.bridgeWidth*circle.sinAngle*0.5f),
-					        				(float) (circle.bridgeStartY + World.bridgeWidth*circle.cosAngle*0.5f),
-					        				(float) (circle.bridgeStartX + World.bridgeWidth*circle.sinAngle*0.5f),
-					        				(float) (circle.bridgeStartY - World.bridgeWidth*circle.cosAngle*0.5f),
-					        				(float) (circle.bridgeEndX - World.bridgeWidth*circle.sinAngle*0.5f),
-					        				(float) (circle.bridgeEndY + World.bridgeWidth*circle.cosAngle*0.5f),
-					        				(float) (circle.bridgeEndX + World.bridgeWidth*circle.sinAngle*0.5f),
-					        				(float) (circle.bridgeEndY - World.bridgeWidth*circle.cosAngle*0.5f) };
-        		sRenderer.polygon(bridgeVertices);
-        	}
         }
         sRenderer.setColor(Color.YELLOW);
         ArrayIterator<Coin> iterCoins = new ArrayIterator<Coin>(world.getCoins());
@@ -112,6 +100,23 @@ public class WorldRenderer {
         	sRenderer.setColor(Color.GREEN);
         	sRenderer.line(world.getRightMagnet().getPosition(), world.getShip().getPosition());
         }
+        sRenderer.setColor(Color.WHITE);
+    	iterCircles = new ArrayIterator<Hole>(world.getHoles());
+        while(iterCircles.hasNext()){
+        	Hole circle = iterCircles.next();
+        	if(circle.isBridged()){
+        		float[] bridgeVertices = {  (float) (circle.bridgeStartX - World.bridgeWidth*circle.sinAngle*0.5f),
+    				        				(float) (circle.bridgeStartY + World.bridgeWidth*circle.cosAngle*0.5f),
+    				        				(float) (circle.bridgeStartX + World.bridgeWidth*circle.sinAngle*0.5f),
+    				        				(float) (circle.bridgeStartY - World.bridgeWidth*circle.cosAngle*0.5f),
+    				        				(float) (circle.bridgeEndX + World.bridgeWidth*circle.sinAngle*0.5f),
+    				        				(float) (circle.bridgeEndY - World.bridgeWidth*circle.cosAngle*0.5f),
+    				        				(float) (circle.bridgeEndX - World.bridgeWidth*circle.sinAngle*0.5f),
+    				        				(float) (circle.bridgeEndY + World.bridgeWidth*circle.cosAngle*0.5f)};
+        		sRenderer.polygon(bridgeVertices);
+        	}
+        }
+    	
         /*sRenderer.setColor(Color.WHITE);
         sRenderer.line((float) SkyMagGame.getWidth()*0.25f, 0f, (float) SkyMagGame.getWidth()*0.25f, (float) SkyMagGame.getHeight());
         sRenderer.line((float) SkyMagGame.getWidth()*0.75f, 0f, (float) SkyMagGame.getWidth()*0.75f, (float) SkyMagGame.getHeight());

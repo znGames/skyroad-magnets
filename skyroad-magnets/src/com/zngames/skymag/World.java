@@ -32,7 +32,7 @@ public class World {
 	final float maxRadius = fieldWidth * 0.4f;
 	final float minRadius = fieldWidth / 8;
 	final float chanceOfCoinGeneration = 0.25f;
-	final float chanceOfBridgeGeneration = 0.1f;
+	final float chanceOfBridgeGeneration = 1f;
 	
 	public World(SkyMagGame game){
 		this.game = game;
@@ -128,6 +128,10 @@ public class World {
 				iterCircles.remove();
 			}
 			circle.setPosition(circle.x, circle.y-globalSpeed*delta);
+			if(circle.isBridged()){
+				circle.bridgeStartY = circle.bridgeStartY-globalSpeed*delta;
+				circle.bridgeEndY = circle.bridgeEndY-globalSpeed*delta;
+			}
 		}
 		
 		// Updating the hole generation gaussian parameters
