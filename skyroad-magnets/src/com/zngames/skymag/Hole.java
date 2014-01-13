@@ -24,9 +24,11 @@ public class Hole extends Circle {
 		this.bridged = bridged;
 		if(bridged){
 			if(x-radius < World.getLeftBorderXCoordinate()){
-				angle = MathUtils.random((float) (MathUtils.PI*1.0/4), (float) Math.min(Math.acos((World.getLeftBorderXCoordinate()-x)*1.0/radius), MathUtils.PI*3.0/4));
+				float leftLimit = (float) Math.min(Math.acos((World.getLeftBorderXCoordinate()-x)*1.0/radius), MathUtils.PI*3.0/4);
+				angle = MathUtils.random(-leftLimit, leftLimit);
 			} else if(x+radius > World.getRightBorderXCoordinate()){
-				angle = MathUtils.random((float) Math.max(Math.acos((World.getRightBorderXCoordinate()-x)*1.0/radius), MathUtils.PI*1.0/4), (float) (MathUtils.PI*3.0/4));
+				float rightLimit = (float) Math.max(Math.acos((World.getRightBorderXCoordinate()-x)*1.0/radius), MathUtils.PI*1.0/4);
+				angle = MathUtils.random(rightLimit, -rightLimit);
 			} else{
 				angle = MathUtils.random((float) (MathUtils.PI*1.0/4), (float) (MathUtils.PI*3.0/4));
 			}
