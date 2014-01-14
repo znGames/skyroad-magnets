@@ -105,15 +105,7 @@ public class WorldRenderer {
         while(iterCircles.hasNext()){
         	Hole circle = iterCircles.next();
         	if(circle.isBridged()){
-        		float[] bridgeVertices = {  (float) (circle.bridgeStartX - World.bridgeWidth*circle.sinAngle*0.5f),
-    				        				(float) (circle.bridgeStartY + World.bridgeWidth*circle.cosAngle*0.5f),
-    				        				(float) (circle.bridgeStartX + World.bridgeWidth*circle.sinAngle*0.5f),
-    				        				(float) (circle.bridgeStartY - World.bridgeWidth*circle.cosAngle*0.5f),
-    				        				(float) (circle.bridgeEndX + World.bridgeWidth*circle.sinAngle*0.5f),
-    				        				(float) (circle.bridgeEndY - World.bridgeWidth*circle.cosAngle*0.5f),
-    				        				(float) (circle.bridgeEndX - World.bridgeWidth*circle.sinAngle*0.5f),
-    				        				(float) (circle.bridgeEndY + World.bridgeWidth*circle.cosAngle*0.5f)};
-        		sRenderer.polygon(bridgeVertices);
+        		sRenderer.polygon(circle.bridgeVertices);
         	}
         }
     	

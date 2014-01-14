@@ -129,8 +129,7 @@ public class World {
 			}
 			circle.setPosition(circle.x, circle.y-globalSpeed*delta);
 			if(circle.isBridged()){
-				circle.bridgeStartY = circle.bridgeStartY-globalSpeed*delta;
-				circle.bridgeEndY = circle.bridgeEndY-globalSpeed*delta;
+				circle.advanceBridge(globalSpeed*delta);
 			}
 		}
 		
