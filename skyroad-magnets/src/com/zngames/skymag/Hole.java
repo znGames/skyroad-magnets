@@ -2,11 +2,12 @@ package com.zngames.skymag;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 
 @SuppressWarnings("serial")
 public class Hole extends Circle {
 	boolean bridged;
-	float[] bridgeVertices;
+	Polygon bridge;
 	
 	public Hole(float x, float y, float radius){
 		super(x,y,radius);
@@ -34,14 +35,16 @@ public class Hole extends Circle {
 			float bridgeEndX = (float) (x - radius*cosAngle);
 			float bridgeEndY = (float) (y - radius*sinAngle);
 			
-			bridgeVertices[1] = (float) (bridgeStartX - World.bridgeWidth*sinAngle*0.5f);
-			bridgeVertices[2] = (float) (bridgeStartY + World.bridgeWidth*cosAngle*0.5f);
-			bridgeVertices[3] = (float) (bridgeStartX + World.bridgeWidth*sinAngle*0.5f);
-			bridgeVertices[4] = (float) (bridgeStartY - World.bridgeWidth*cosAngle*0.5f);
-			bridgeVertices[5] = (float) (bridgeEndX + World.bridgeWidth*sinAngle*0.5f);
-			bridgeVertices[6] = (float) (bridgeEndY - World.bridgeWidth*cosAngle*0.5f);
-			bridgeVertices[7] = (float) (bridgeEndX - World.bridgeWidth*sinAngle*0.5f);
-			bridgeVertices[8] = (float) (bridgeEndY + World.bridgeWidth*cosAngle*0.5f);
+			float[] bridgeVertices = { (float) (bridgeStartX - World.bridgeWidth*sinAngle*0.5f),
+									(float) (bridgeStartY + World.bridgeWidth*cosAngle*0.5f),
+									(float) (bridgeStartX + World.bridgeWidth*sinAngle*0.5f),
+									(float) (bridgeStartY - World.bridgeWidth*cosAngle*0.5f),
+									(float) (bridgeEndX + World.bridgeWidth*sinAngle*0.5f),
+									(float) (bridgeEndY - World.bridgeWidth*cosAngle*0.5f),
+									(float) (bridgeEndX - World.bridgeWidth*sinAngle*0.5f),
+									(float) (bridgeEndY + World.bridgeWidth*cosAngle*0.5f) };
+			
+			bridge = new Polygon(bridgeVertices);
 		}
 	}
 	public boolean isBridged(){
@@ -49,8 +52,10 @@ public class Hole extends Circle {
 	}
 	
 	public void advanceBridge(float offset){
-		for(int i=0;i<4;i++){
-			bridgeVertices[2*i+1] -= offset;
-		}
+		bridge.translate(0, -offset);
+	}
+	
+	public boolean contains(float x, float y){
+		return super.contains(x,y) && (!bridged || !bridge.contains(x, y));
 	}
 }

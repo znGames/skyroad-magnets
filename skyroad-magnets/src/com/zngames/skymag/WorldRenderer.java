@@ -105,7 +105,7 @@ public class WorldRenderer {
         while(iterCircles.hasNext()){
         	Hole circle = iterCircles.next();
         	if(circle.isBridged()){
-        		sRenderer.polygon(circle.bridgeVertices);
+        		sRenderer.polygon(circle.bridge.getVertices());
         	}
         }
     	
