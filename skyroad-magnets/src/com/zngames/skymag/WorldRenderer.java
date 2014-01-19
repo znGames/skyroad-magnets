@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
 
 public class WorldRenderer {
@@ -40,9 +39,9 @@ public class WorldRenderer {
         sRenderer.setColor(new Color(1, 0.54f, 0, 1));
         sRenderer.rect(SkyMagGame.getWidth()*0.25f, 0, SkyMagGame.getWidth()*0.5f, SkyMagGame.getHeight());
         sRenderer.setColor(Color.BLACK);
-        ArrayIterator<Circle> iterCircles = new ArrayIterator<Circle>(world.getHoles());
+        ArrayIterator<Hole> iterCircles = new ArrayIterator<Hole>(world.getHoles());
         while(iterCircles.hasNext()){
-        	Circle circle = iterCircles.next();
+        	Hole circle = iterCircles.next();
         	sRenderer.circle(circle.x, circle.y, circle.radius);
         }
         sRenderer.setColor(Color.YELLOW);
@@ -50,6 +49,12 @@ public class WorldRenderer {
         while(iterCoins.hasNext()){
         	Coin coin = iterCoins.next();
         	sRenderer.circle(coin.getX(), coin.getY(), coin.getWidth()/2);
+        }
+        sRenderer.setColor(Color.GRAY);
+        ArrayIterator<Key> iterKeys = new ArrayIterator<Key>(world.getKeys());
+        while(iterKeys.hasNext()){
+        	Key key = iterKeys.next();
+        	sRenderer.circle(key.getX(), key.getY(), key.getWidth()/2);
         }
         //sRenderer.circle(SkyMagGame.getWidth()/4, SkyMagGame.getHeight()/4, 10);
         //System.out.println(SkyMagGame.getWidth());
@@ -101,13 +106,22 @@ public class WorldRenderer {
         	sRenderer.setColor(Color.GREEN);
         	sRenderer.line(world.getRightMagnet().getPosition(), world.getShip().getPosition());
         }
+        sRenderer.setColor(Color.WHITE);
+    	iterCircles = new ArrayIterator<Hole>(world.getHoles());
+        while(iterCircles.hasNext()){
+        	Hole circle = iterCircles.next();
+        	if(circle.isBridged()){
+        		sRenderer.polygon(circle.bridge.getTransformedVertices());
+        	}
+        }
+    	
         /*sRenderer.setColor(Color.WHITE);
         sRenderer.line((float) SkyMagGame.getWidth()*0.25f, 0f, (float) SkyMagGame.getWidth()*0.25f, (float) SkyMagGame.getHeight());
         sRenderer.line((float) SkyMagGame.getWidth()*0.75f, 0f, (float) SkyMagGame.getWidth()*0.75f, (float) SkyMagGame.getHeight());
         //sRenderer.circle(world.testCircle.x, world.testCircle.y, world.testCircle.radius);
-        ArrayIterator<Circle> iter = new ArrayIterator<Circle>(world.holes);
+        ArrayIterator<Hole> iter = new ArrayIterator<Hole>(world.holes);
         while(iter.hasNext()){
-        	Circle circle = iter.next();
+        	Hole circle = iter.next();
         	sRenderer.circle(circle.x, circle.y, circle.radius);
         }*/
         sRenderer.end();

@@ -10,6 +10,7 @@ public abstract class Ship extends Entity {
 	Magnet rightMagnet;
 	Vector2 velocity;
 	float coinCounter = 0;
+	float keyCounter = 0;
 	static final float freezingTime = 2;
 	float timeUntilUnfreezing = 0;
 
@@ -38,6 +39,10 @@ public abstract class Ship extends Entity {
 	
 	public void increaseCoinCounter(int value){
 		coinCounter += value;
+	}
+	
+	public void increaseKeyCounter(){
+		keyCounter++;
 	}
 	
 	public void changeVelocity(float x, float y){

@@ -3,7 +3,6 @@ package com.zngames.skymag;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -17,21 +16,24 @@ public class World {
 	Magnet leftMagnet;
 	Magnet rightMagnet;
 	float timeSinceLastCircle;
-	Array<Circle> holes;
+	Array<Hole> holes;
 	Array<Enemy> enemies;
 	Array<Coin> coins;
+	Array<Key> keys;
 	float globalSpeed;
 	float muRadius;
 	float sigmaRadius;
 	float minDistanceBetweenHoles;
 	float minDistanceBetweenHolesAndCoins;
-	Circle pendingHole;
+	Hole pendingHole;
 	float pendingDistance;
 	float surplusDistance;
 	static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
+	static final float bridgeWidth = SkyMagGame.getWidth() / 32;
 	final float maxRadius = fieldWidth * 0.4f;
-	final float minRadius = fieldWidth/8;
+	final float minRadius = fieldWidth / 8;
 	final float chanceOfCoinGeneration = 0.25f;
+	final float chanceOfBridgeGeneration = 1f;
 	
 	public World(SkyMagGame game){
 		this.game = game;
@@ -40,9 +42,10 @@ public class World {
 		ship = new DiscShip(leftMagnet, rightMagnet);
 		Gdx.input.setInputProcessor(new InputHandler(this));
 		timeSinceLastCircle = 0;
-		holes = new Array<Circle>(false, 16);
+		holes = new Array<Hole>(false, 16);
 		enemies = new Array<Enemy>(false, 16);
 		coins = new Array<Coin>(false, 16);
+		keys = new Array<Key>(false, 16);
 		globalSpeed = 60;
 		muRadius = (maxRadius-minRadius)*0.25f + minRadius;
 		sigmaRadius = maxRadius*0.50f;
@@ -64,6 +67,9 @@ public class World {
 		// Updating the coins
 		updateCoins(delta);
 		
+		// Updating the keys
+		updateKeys(delta);
+		
 		// Updating the enemies
 		updateEnemies(delta);
 		
@@ -81,6 +87,9 @@ public class World {
 			pendingDistance += globalSpeed*delta;
 			if(pendingDistance >= surplusDistance){
 				holes.add(pendingHole);
+				if(pendingHole.isBridged()){
+					generateKey(pendingHole.x, pendingHole.y);
+				}
 				if(MathUtils.randomBoolean(chanceOfCoinGeneration)){
 					generateCircleOfCoins(pendingHole.x, pendingHole.y, pendingHole.radius);
 				}
@@ -100,33 +109,40 @@ public class World {
 			surplusDistance = -1;
 			x = MathUtils.random(SkyMagGame.getWidth()*0.25f, SkyMagGame.getWidth()*0.25f + fieldWidth);
 			radius = generateRadius(minRadius, maxRadius);
-			ArrayIterator<Circle> iter = new ArrayIterator<Circle>(holes);
+			ArrayIterator<Hole> iter = new ArrayIterator<Hole>(holes);
 			while(iter.hasNext()){
-				Circle circle = iter.next();
+				Hole circle = iter.next();
 				if(Math.sqrt((circle.x-x)*(circle.x-x) + (circle.y-y)*(circle.y-y)) < radius + minDistanceBetweenHoles + circle.radius){
 					surplusDistance = (float) Math.sqrt((radius + minDistanceBetweenHoles + circle.radius)*(radius + minDistanceBetweenHoles + circle.radius) - (circle.x-x)*(circle.x-x)) - Math.abs(circle.y-y);
 				}
 			}
 			
+			boolean bridged = MathUtils.randomBoolean(chanceOfBridgeGeneration);
 			if(surplusDistance <= 0){
-				holes.add(new Circle(x,y,radius));
+				holes.add(new Hole(x,y,radius,bridged));
+				if(bridged){
+					generateKey(x, y);
+				}
 				if(MathUtils.randomBoolean(chanceOfCoinGeneration)){
 					generateCircleOfCoins(x, y, radius);
 				}
 			} else {
-				pendingHole = new Circle(x,y,radius);
+				pendingHole = new Hole(x,y,radius,bridged);
 				pendingDistance = 0;
 			}
 		}
 		
 		// Removing old holes and making the current holes advance
-		ArrayIterator<Circle> iterCircles = new ArrayIterator<Circle>(holes);
+		ArrayIterator<Hole> iterCircles = new ArrayIterator<Hole>(holes);
 		while(iterCircles.hasNext()){
-			Circle circle = iterCircles.next();
+			Hole circle = iterCircles.next();
 			if(circle.y + circle.radius < 0){
 				iterCircles.remove();
 			}
 			circle.setPosition(circle.x, circle.y-globalSpeed*delta);
+			if(circle.isBridged()){
+				circle.advanceBridge(globalSpeed*delta);
+			}
 		}
 		
 		// Updating the hole generation gaussian parameters
@@ -159,6 +175,18 @@ public class World {
         		iterCoins.remove();
         	} else{
         		coin.setPosition(coin.getX(), coin.getY()-globalSpeed*delta);
+        	}
+        }
+	}
+	
+	public void updateKeys(float delta){
+        ArrayIterator<Key> iterKeys = new ArrayIterator<Key>(keys);
+        while(iterKeys.hasNext()){
+        	Key key = iterKeys.next();
+        	if(key.actOn(ship)){
+        		iterKeys.remove();
+        	} else{
+        		key.setPosition(key.getX(), key.getY()-globalSpeed*delta);
         	}
         }
 	}
@@ -197,6 +225,10 @@ public class World {
 		}
 	}
 	
+	public void generateKey(float x, float y){
+		keys.add(new Key(x,y));
+	}
+	
 	public Ship getShip() {
 		return ship;
 	}
@@ -229,7 +261,7 @@ public class World {
 		this.wr = wr;
 	}
 	
-	public Array<Circle> getHoles(){
+	public Array<Hole> getHoles(){
 		return holes;
 	}
 	
@@ -239,6 +271,10 @@ public class World {
 	
 	public Array<Coin> getCoins(){
 		return coins;
+	}
+	
+	public Array<Key> getKeys(){
+		return keys;
 	}
 	
 	static public float getFieldWidth(){
