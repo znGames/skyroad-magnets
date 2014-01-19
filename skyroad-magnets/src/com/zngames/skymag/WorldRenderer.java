@@ -50,6 +50,12 @@ public class WorldRenderer {
         	Coin coin = iterCoins.next();
         	sRenderer.circle(coin.getX(), coin.getY(), coin.getWidth()/2);
         }
+        sRenderer.setColor(Color.GRAY);
+        ArrayIterator<Key> iterKeys = new ArrayIterator<Key>(world.getKeys());
+        while(iterKeys.hasNext()){
+        	Key key = iterKeys.next();
+        	sRenderer.circle(key.getX(), key.getY(), key.getWidth()/2);
+        }
         //sRenderer.circle(SkyMagGame.getWidth()/4, SkyMagGame.getHeight()/4, 10);
         //System.out.println(SkyMagGame.getWidth());
         //System.out.println(SkyMagGame.getHeight());
@@ -105,7 +111,7 @@ public class WorldRenderer {
         while(iterCircles.hasNext()){
         	Hole circle = iterCircles.next();
         	if(circle.isBridged()){
-        		sRenderer.polygon(circle.bridge.getVertices());
+        		sRenderer.polygon(circle.bridge.getTransformedVertices());
         	}
         }
     	

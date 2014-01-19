@@ -19,6 +19,7 @@ public class World {
 	Array<Hole> holes;
 	Array<Enemy> enemies;
 	Array<Coin> coins;
+	Array<Key> keys;
 	float globalSpeed;
 	float muRadius;
 	float sigmaRadius;
@@ -44,6 +45,7 @@ public class World {
 		holes = new Array<Hole>(false, 16);
 		enemies = new Array<Enemy>(false, 16);
 		coins = new Array<Coin>(false, 16);
+		keys = new Array<Key>(false, 16);
 		globalSpeed = 60;
 		muRadius = (maxRadius-minRadius)*0.25f + minRadius;
 		sigmaRadius = maxRadius*0.50f;
@@ -65,6 +67,9 @@ public class World {
 		// Updating the coins
 		updateCoins(delta);
 		
+		// Updating the keys
+		updateKeys(delta);
+		
 		// Updating the enemies
 		updateEnemies(delta);
 		
@@ -82,6 +87,9 @@ public class World {
 			pendingDistance += globalSpeed*delta;
 			if(pendingDistance >= surplusDistance){
 				holes.add(pendingHole);
+				if(pendingHole.isBridged()){
+					generateKey(pendingHole.x, pendingHole.y);
+				}
 				if(MathUtils.randomBoolean(chanceOfCoinGeneration)){
 					generateCircleOfCoins(pendingHole.x, pendingHole.y, pendingHole.radius);
 				}
@@ -109,13 +117,17 @@ public class World {
 				}
 			}
 			
+			boolean bridged = MathUtils.randomBoolean(chanceOfBridgeGeneration);
 			if(surplusDistance <= 0){
-				holes.add(new Hole(x,y,radius,MathUtils.randomBoolean(chanceOfBridgeGeneration)));
+				holes.add(new Hole(x,y,radius,bridged));
+				if(bridged){
+					generateKey(x, y);
+				}
 				if(MathUtils.randomBoolean(chanceOfCoinGeneration)){
 					generateCircleOfCoins(x, y, radius);
 				}
 			} else {
-				pendingHole = new Hole(x,y,radius,MathUtils.randomBoolean(chanceOfBridgeGeneration));
+				pendingHole = new Hole(x,y,radius,bridged);
 				pendingDistance = 0;
 			}
 		}
@@ -167,6 +179,18 @@ public class World {
         }
 	}
 	
+	public void updateKeys(float delta){
+        ArrayIterator<Key> iterKeys = new ArrayIterator<Key>(keys);
+        while(iterKeys.hasNext()){
+        	Key key = iterKeys.next();
+        	if(key.actOn(ship)){
+        		iterKeys.remove();
+        	} else{
+        		key.setPosition(key.getX(), key.getY()-globalSpeed*delta);
+        	}
+        }
+	}
+	
 	public float generateRadius(float min, float max){
 		float z;
 		int cpt = 0;
@@ -199,6 +223,10 @@ public class World {
 			}
 			currentAngle += angleBetweenCircles;
 		}
+	}
+	
+	public void generateKey(float x, float y){
+		keys.add(new Key(x,y));
 	}
 	
 	public Ship getShip() {
@@ -243,6 +271,10 @@ public class World {
 	
 	public Array<Coin> getCoins(){
 		return coins;
+	}
+	
+	public Array<Key> getKeys(){
+		return keys;
 	}
 	
 	static public float getFieldWidth(){
