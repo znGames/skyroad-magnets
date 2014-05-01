@@ -1,58 +1,32 @@
 package com.zngames.skymag;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Entity {
-
-	Vector2 position;
-	float width;
-	float height;
+public abstract class Entity extends Sprite{
 	
-	public Entity(Vector2 position, float width, float height){
-		this.position = position;
-		this.width = width;
-		this.height = height;
+	public Vector2 position;
+		
+	public Entity(TextureRegion region){
+		super(region);
+		this.position = new Vector2(0,0);
 	}
 	
-	public Entity(float x, float y, float width, float height){
-		this(new Vector2(x, y), width, height);
-	}
-
-	public Vector2 getPosition() {
-		return position;
-	}
-
-	public void setPosition(Vector2 position) {
-		this.position = position;
+	public Entity(TextureRegion region,Vector2 position, float width, float height){
+		super(region);
+		this.position = new Vector2(0,0);
+		
+		setSize(width,height);
+		setPosition(position.x,position.y);		
 	}
 	
-	public void setPosition(float x, float y){
-		this.position.x = x;
-		this.position.y = y;
+	@Override
+	public void setPosition(float x,float y){
+		super.setPosition(x,y);
+		position.set(x,y);
 	}
 	
-	public float getX(){
-		return position.x;
-	}
-	
-	public float getY(){
-		return position.y;
-	}
+	public abstract void update(float delta);
 
-	public float getWidth() {
-		return width;
-	}
-
-	public void setWidth(float width) {
-		this.width = width;
-	}
-
-	public float getHeight() {
-		return height;
-	}
-
-	public void setHeight(float height) {
-		this.height = height;
-	}
-	
 }

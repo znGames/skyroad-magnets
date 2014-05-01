@@ -1,11 +1,23 @@
 package com.zngames.skymag;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class FreezerEnemy extends Enemy {
 
-	private float timeSinceCreation = 0;
+	public FreezerEnemy(TextureRegion region) {
+		super(region);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void update(float delta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*private float timeSinceCreation = 0;
 	private boolean isFiring = false;
 	public final float speed = 30;
 	public final static float timeUntilFire = 5;
@@ -51,5 +63,5 @@ public class FreezerEnemy extends Enemy {
 	
 	public boolean isFiring(){
 		return isFiring;
-	}
+	}*/
 }

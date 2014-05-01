@@ -1,6 +1,7 @@
 package com.zngames.skymag;
 
 import com.badlogic.gdx.math.Vector2;
+import com.zngames.assets.Assets;
 
 public class Magnet extends Entity {
 	
@@ -8,12 +9,14 @@ public class Magnet extends Entity {
 	//float moment;
 
 	public Magnet(Vector2 position, float width, float height){
-		super(position, width, height);
+		//super(Assets.magnet,position, width, height);
+		super(Assets.square,position,width,height);
+		setColor(1,0,0,1);
 		active = false;
 		//moment = 0;
 	}
 	
-	public Vector2 getAttraction(Entity entity){
+	/*public Vector2 getAttraction(Entity entity){
 		if(active){
 			return getPosition();
 		}
@@ -21,7 +24,7 @@ public class Magnet extends Entity {
 		//decreaseMoment();
 		//return getPosition().cpy().lerp(entity.getPosition(), 1-moment);
 		return entity.getPosition();
-	}
+	}*/
 	
 	/*public void decreaseMoment(){
 		moment -= 0.01;
@@ -42,9 +45,10 @@ public class Magnet extends Entity {
 	public boolean isActive(){
 		return active;
 	}
-	
-	//public float getMoment(){
-	//	return moment;
-	//}
+
+	@Override
+	public void update(float delta) {
+		
+	}
 	
 }
