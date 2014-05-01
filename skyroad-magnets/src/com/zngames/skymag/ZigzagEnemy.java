@@ -1,11 +1,23 @@
 package com.zngames.skymag;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 
 public class ZigzagEnemy extends Enemy {
 
-	int acceleration = -1;
+	public ZigzagEnemy(TextureRegion region) {
+		super(region);
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void update(float delta) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*int acceleration = -1;
 	Vector2 velocity = new Vector2(0,-0.5f);
 	float horizontalSpeed = 2f;
 	float power = 0.15f;
@@ -40,13 +52,13 @@ public class ZigzagEnemy extends Enemy {
 	}
 	
 	public boolean shouldStopExisting(World world){
-		return position.y + height <= 0;
+		return position.y + getHeight() <= 0;
 	}
 	
 	public void actOn(Ship ship){
-		if(ship.overlapsCircle(new Circle(position.x, position.y, width/2))){
+		if(ship.overlapsCircle(new Circle(position.x, position.y, getWidth()/2f))){
 			ship.changeVelocity(power*(ship.getX()-position.x), power*(ship.getY()-position.y));
 		}
-	}
+	}*/
 	
 }

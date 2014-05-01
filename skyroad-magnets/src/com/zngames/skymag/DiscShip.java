@@ -7,12 +7,17 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Array.ArrayIterator;
 
 public class DiscShip extends Ship {
+
+	public DiscShip(float width, float height) {
+		super(width, height);
+		// TODO Auto-generated constructor stub
+	}
 		
-	public float[] gridCos = {1f,0.99144f,0.96593f,0.92388f,0.86603f,0.79335f,0.70711f,0.60876f,0.5f,0.38268f,0.25882f,0.13053f,-0f,-0.13053f,-0.25882f,-0.38268f,-0.5f,-0.60876f,-0.70711f,-0.79335f,-0.86603f,-0.92388f,-0.96593f,-0.99144f,-1f,-0.99144f,-0.96593f,-0.92388f,-0.86603f,-0.79335f,-0.70711f,-0.60876f,-0.5f,-0.38268f,-0.25882f,-0.13053f,-0f,0.13053f,0.25882f,0.38268f,0.5f,0.60876f,0.70711f,0.79335f,0.86603f,0.92388f,0.96593f,0.99144f};
+	/*public float[] gridCos = {1f,0.99144f,0.96593f,0.92388f,0.86603f,0.79335f,0.70711f,0.60876f,0.5f,0.38268f,0.25882f,0.13053f,-0f,-0.13053f,-0.25882f,-0.38268f,-0.5f,-0.60876f,-0.70711f,-0.79335f,-0.86603f,-0.92388f,-0.96593f,-0.99144f,-1f,-0.99144f,-0.96593f,-0.92388f,-0.86603f,-0.79335f,-0.70711f,-0.60876f,-0.5f,-0.38268f,-0.25882f,-0.13053f,-0f,0.13053f,0.25882f,0.38268f,0.5f,0.60876f,0.70711f,0.79335f,0.86603f,0.92388f,0.96593f,0.99144f};
 	public float[] gridSin = {0f,0.13053f,0.25882f,0.38268f,0.5f,0.60876f,0.70711f,0.79335f,0.86603f,0.92388f,0.96593f,0.99144f,1f,0.99144f,0.96593f,0.92388f,0.86603f,0.79335f,0.70711f,0.60876f,0.5f,0.38268f,0.25882f,0.13053f,0f,-0.13053f,-0.25882f,-0.38268f,-0.5f,-0.60876f,-0.70711f,-0.79335f,-0.86603f,-0.92388f,-0.96593f,-0.99144f,-1f,-0.99144f,-0.96593f,-0.92388f,-0.86603f,-0.79335f,-0.70711f,-0.60876f,-0.5f,-0.38268f,-0.25882f,-0.13053f};
 	
-	public DiscShip(Magnet leftMagnet, Magnet rightMagnet){
-		super(SkyMagGame.getWidth()/24, SkyMagGame.getWidth()/24, leftMagnet, rightMagnet);
+	public DiscShip(){
+		//super(SkyMagGame.getWidth()/24, SkyMagGame.getWidth()/24, leftMagnet, rightMagnet);
 	}
 	
 	public boolean isFalling(World world){
@@ -72,5 +77,5 @@ public class DiscShip extends Ship {
 	
 	public boolean overlapsCircle(Circle circle){
 		return circle.overlaps(new Circle(getX(), getY(), getWidth()/2));
-	}
+	}*/
 }

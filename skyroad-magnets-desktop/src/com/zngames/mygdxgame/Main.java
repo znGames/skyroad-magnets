@@ -11,6 +11,7 @@ public class Main {
 		cfg.useGL20 = false;
 		cfg.width = 720; //480 by default
 		cfg.height = 480; //320 by default
+		cfg.fullscreen = false;
 		
 		new LwjglApplication(new SkyMagGame(), cfg);
 	}

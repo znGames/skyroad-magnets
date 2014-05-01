@@ -10,28 +10,28 @@ import com.badlogic.gdx.utils.Array.ArrayIterator;
 
 public class World {
 	
-	SkyMagGame game;
-	WorldRenderer wr;
-	Ship ship;
-	Magnet leftMagnet;
-	Magnet rightMagnet;
-	float timeSinceLastCircle;
-	Array<Hole> holes;
-	Array<Enemy> enemies;
-	Array<Coin> coins;
-	Array<Key> keys;
-	float globalSpeed;
-	float muRadius;
-	float sigmaRadius;
-	float minDistanceBetweenHoles;
-	float minDistanceBetweenHolesAndCoins;
-	Hole pendingHole;
-	float pendingDistance;
-	float surplusDistance;
-	static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
-	static final float bridgeWidth = SkyMagGame.getWidth() / 32;
-	final float maxRadius = fieldWidth * 0.4f;
-	final float minRadius = fieldWidth / 8;
+	/*private SkyMagGame game;
+	//WorldRenderer wr;
+	private Ship ship;
+	private Magnet leftMagnet;
+	private Magnet rightMagnet;
+	private float timeSinceLastCircle;
+	private Array<Hole> holes;
+	//Array<Enemy> enemies;
+	private Array<Coin> coins;
+	private Array<Key> keys;
+	private float globalSpeed;
+	private float muRadius;
+	private float sigmaRadius;
+	private float minDistanceBetweenHoles;
+	private float minDistanceBetweenHolesAndCoins;
+	private Hole pendingHole;
+	private float pendingDistance;
+	private float surplusDistance;
+	//static final float fieldWidth = SkyMagGame.getWidth() * 0.5f; 
+	//static final float bridgeWidth = SkyMagGame.getWidth() / 32;
+	//final float maxRadius = fieldWidth * 0.4f;
+	//final float minRadius = fieldWidth / 8;
 	final float chanceOfCoinGeneration = 0.25f;
 	final float chanceOfBridgeGeneration = 1f;
 	
@@ -291,6 +291,6 @@ public class World {
 	
 	static public float getMiddleBorderXCoordinate(){
 		return SkyMagGame.getWidth()/2;
-	}
+	}*/
 	
 }

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array.ArrayIterator;
 
 public class WorldRenderer {
 
-	World world;
+	/*World world;
 	OrthographicCamera cam;
 	ShapeRenderer sRenderer;
 	boolean drawLeftMagnetLine;
@@ -75,12 +75,12 @@ public class WorldRenderer {
         	Enemy enemy = iterEnemy.next();
         	if(enemy.getClass().getName() == "com.zngames.skymag.FreezerEnemy"){
         		sRenderer.setColor(Color.CYAN);
-        		/*
-        		float[] vertices = {(float) (world.getLeftBorderXCoordinate() - enemy.getWidth() + Math.cos(5.0*Math.PI/6)), (float) (enemy.getY() + Math.sin(5.0*Math.PI/6)), 
-        							(float) (world.getLeftBorderXCoordinate() - enemy.getWidth() + Math.cos(7.0*Math.PI/6)), (float) (enemy.getY() + Math.sin(7.0*Math.PI/6)),
-        							world.getLeftBorderXCoordinate() - enemy.getWidth() +  1, enemy.getY()};
-        		sRenderer.polygon(vertices);
-        		*/
+        		
+        		//float[] vertices = {(float) (world.getLeftBorderXCoordinate() - enemy.getWidth() + Math.cos(5.0*Math.PI/6)), (float) (enemy.getY() + Math.sin(5.0*Math.PI/6)), 
+        		//					(float) (world.getLeftBorderXCoordinate() - enemy.getWidth() + Math.cos(7.0*Math.PI/6)), (float) (enemy.getY() + Math.sin(7.0*Math.PI/6)),
+        		//					world.getLeftBorderXCoordinate() - enemy.getWidth() +  1, enemy.getY()};
+        		//sRenderer.polygon(vertices);
+        		
         		sRenderer.triangle((float) (World.getLeftBorderXCoordinate() - enemy.getWidth() + enemy.getWidth()*Math.cos(5.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(5.0*Math.PI/6)),
         						   (float) (World.getLeftBorderXCoordinate() - enemy.getWidth() + enemy.getWidth()*Math.cos(7.0*Math.PI/6)), (float) (enemy.getY() + enemy.getWidth()*Math.sin(7.0*Math.PI/6)),
         						    World.getLeftBorderXCoordinate(), enemy.getY());
@@ -115,15 +115,15 @@ public class WorldRenderer {
         	}
         }
     	
-        /*sRenderer.setColor(Color.WHITE);
-        sRenderer.line((float) SkyMagGame.getWidth()*0.25f, 0f, (float) SkyMagGame.getWidth()*0.25f, (float) SkyMagGame.getHeight());
-        sRenderer.line((float) SkyMagGame.getWidth()*0.75f, 0f, (float) SkyMagGame.getWidth()*0.75f, (float) SkyMagGame.getHeight());
+        //sRenderer.setColor(Color.WHITE);
+        //sRenderer.line((float) SkyMagGame.getWidth()*0.25f, 0f, (float) SkyMagGame.getWidth()*0.25f, (float) SkyMagGame.getHeight());
+        //sRenderer.line((float) SkyMagGame.getWidth()*0.75f, 0f, (float) SkyMagGame.getWidth()*0.75f, (float) SkyMagGame.getHeight());
         //sRenderer.circle(world.testCircle.x, world.testCircle.y, world.testCircle.radius);
-        ArrayIterator<Hole> iter = new ArrayIterator<Hole>(world.holes);
-        while(iter.hasNext()){
-        	Hole circle = iter.next();
-        	sRenderer.circle(circle.x, circle.y, circle.radius);
-        }*/
+        //ArrayIterator<Hole> iter = new ArrayIterator<Hole>(world.holes);
+        //while(iter.hasNext()){
+        //	Hole circle = iter.next();
+        //	sRenderer.circle(circle.x, circle.y, circle.radius);
+        //}
         sRenderer.end();
 		
 	}
@@ -150,6 +150,6 @@ public class WorldRenderer {
 	
 	public void stopDrawingRightLine(){
 		drawRightMagnetLine = false;
-	}
+	}*/
 	
 }
